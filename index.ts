@@ -18,6 +18,38 @@ function sum(a: number, b: string): number {
   return a + b;
 }
 
+// typescript is duck-typed so you don't need to declare a type if it can be inferred. if you're in VSCode hover
+// over each of these variables and check out the type.
+let myBool = false;
+let myNum = 5;
+let myStr = "hello";
+let myObj = { hello: "world" };
+
+/** a primer on the `any` type */
+
+// using the `any` type takes any compile-time errors and moves them to the runtime. it is functionally equivalent
+// to writing plain Javascript. sometimes you may need `any` as a crutch but it should be used sparingly and is a
+// candidate for refactoring before merging your code
+
+// an example of using `any` to make a compile-time error into a runtime error
+function compileTimeError(): string {
+  // Number.prototype.toFixed() does not exist on string, so this code would fail on runtime when calling .toFixed().
+  // however, we've caught this pre-compilation and can fix accordingly
+  let n: number;
+  n = "1"; // change this to n = 1 and we're good to go!
+  return n.toFixed();
+}
+
+// this function compiles. yay! but if you try to run it you get a nasty runtime error because `typeof n` is `string` and
+// String.prototype.toFixed() does not exist. all `n as number` does is tell the compiler that you as the developer trust that
+// `n` is a number and can be used like a number safely (which it cannot, in this instance).
+// a more complex compiler might be able to catch something like this but ultimately, using `any` comes with a cost in runtime
+function runTimeError(): string {
+  let n: any;
+  n = "1";
+  return (n as number).toFixed();
+}
+
 /** interface demo */
 
 // a basic model from your application might look like this
